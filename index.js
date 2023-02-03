@@ -53,6 +53,14 @@ function skor2() {
   return skor++;
 }
 
+// 1- skor1 içindeki skor değişkeni skorArtirici fonksiyonunda local scope içinde tanımlanmıştır. Dışarıdan erişimi fonksiyonu çağırmadan mümkün değildir. 
+// skor2, global scope ta tanımlı bir skor değişkenine sahiptir.
+
+// 2-skor1 bir closure kullanmaktadır. Closure yapısı, bir fonksiyon içinde tanımlanmış ve dışarıdan erişilemeyen bir değişkeni saklamaya imkan tanır. 
+
+// 3- skor1 yapısını tanımlanmış değişkenlere dışarıdan closure yapısı dışında erişim istemediğimizde kullanabiliriz. 
+// skor2 yapısını ise global olarak tanımlı degiskenlere erişim istediğimizde tercih edebiliriz. 
+
 
 /* Görev 2: takimSkoru() 
 Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
@@ -64,11 +72,10 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru() {
+  return Math.floor(Math.random() * (16) + 10);
 }
-
-
+// console.log(takimSkoru())
 
 
 /* Görev 3: macSonucu() 
@@ -86,11 +93,23 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(takimSkoruCB, ceyrekSayisi){
+  let evSahibi= 0;
+  let konukTakim= 0;
+  let object= {};
+
+  for(let i=0; i<ceyrekSayisi; i++){
+  evSahibi += takimSkoruCB();
+  konukTakim += takimSkoruCB();
+  }
+  return object= {
+  "EvSahibi": evSahibi,
+  "KonukTakim": konukTakim
+  }
 }
 
 
+// console.log(macSonucu(takimSkoru, 4))
 
 
 
@@ -109,11 +128,12 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-
-}
-
+function periyotSkoru(takimSkoruCB){
+  let object = {};
+  return object = {"EvSahibi": takimSkoruCB(),
+          "KonukTakim": takimSkoruCB()}
+  }
+  // console.log(periyotSkoru(takimSkoru));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -146,12 +166,45 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function skorTabelasi(periyotSkoruCB, takimSkoruCB, ceyrekSayisi){
+  // periyod objelerini bir stringe dönüştürecek ve array içine eleman olarak ekleyecek.
+  // uzatmalar (if (4.period objesinde 2 property eşitse.))
+  let skorArray = [];
+  let evSahibiSkor = 0;
+  let konukSkor = 0;
+  let evSahibiSkorToplami = 0;
+  let konukSkorToplami = 0;
+  for (let i = 1; i <= ceyrekSayisi; i++) {
+    let object = periyotSkoruCB(takimSkoruCB)
+    evSahibiSkor = object.EvSahibi;
+    konukSkor = object.KonukTakim;
+    let arrayElemani = `${i}. Periyot: Ev Sahibi ${evSahibiSkor} - Konuk Takım ${konukSkor}` ;
+    skorArray.push(arrayElemani) ;
+    evSahibiSkorToplami += evSahibiSkor;
+    konukSkorToplami += konukSkor;
+    // console.log (arrayElemani);
+  }
+    let i = 1;
+    // konukSkorToplami = evSahibiSkorToplami;
+    // console.log(konukSkorToplami, evSahibiSkorToplami);
+  while(konukSkorToplami === evSahibiSkorToplami){
+    let object = periyotSkoruCB(takimSkoruCB)
+    evSahibiSkor = object.EvSahibi;
+    konukSkor = object.KonukTakim;
+    let arrayElemani = `${i}. Uzatma: Ev Sahibi ${evSahibiSkor} - Konuk Takım ${konukSkor}` ;
+    skorArray.push(arrayElemani) ;
+    evSahibiSkorToplami += evSahibiSkor;
+    konukSkorToplami += konukSkor;
+    // console.log (arrayElemani);
+    i++;
+  }
+  macSonucuElemani = `Maç Sonucu: Ev Sahibi ${evSahibiSkorToplami} - Konuk Takım ${konukSkorToplami}` ;
+  skorArray.push(macSonucuElemani) ;
+
+console.log (skorArray);
 }
 
-
-
+console.log(skorTabelasi(periyotSkoru,takimSkoru,4));
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
 function sa(){
